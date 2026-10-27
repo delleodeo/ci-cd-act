@@ -26,7 +26,12 @@ jobs:
       - name: Remove previous container
         shell: powershell
         continue-on-error: true
-        run: docker rm -f ionic-crud
+        run: |
+          docker rm -f ionic-crud
+          $containers = docker ps --filter "publish=8100" --format "{{.ID}}"
+          foreach ($container in $containers) {
+            docker rm -f $container
+          }
 
       - name: Start updated container
         shell: powershell
