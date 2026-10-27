@@ -1,79 +1,58 @@
-name: CI/CD
+name: Deploy Ionic App Locally
 
 on:
   push:
     branches:
       - main
-      - master
-  pull_request:
 
 permissions:
   contents: read
 
-env:
-  NODE_VERSION: 22
-
 jobs:
-  verify:
-    name: Verify application
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on:
+      - self-hosted
+      - Windows
+      - X64
 
     steps:
-      - name: Check out source
+      - name: Checkout latest code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
+      - name: Build Ionic image
+        shell: pwsh
+        run: docker build --pull -t ionic-crud:latest .
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Remove previous container
+        shell: pwsh
+        continue-on-error: true
+        run: docker rm -f ionic-crud
 
-      - name: Lint
-        run: npm run lint
+      - name: Start updated container
+        shell: pwsh
+        run: docker run -d --name ionic-crud --restart unless-stopped -p 8100:80 ionic-crud:latest
 
-      - name: Run tests
-        run: npm test -- --watch=false
+      - name: Verify app
+        shell: pwsh
+        run: |
+          $success = $false
 
-      - name: Build application
-        run: npm run build
+          for ($i = 1; $i -le 15; $i++) {
+            try {
+              $response = Invoke-WebRequest -Uri "http://localhost:8100/" -UseBasicParsing -TimeoutSec 2
+              if ($response.StatusCode -eq 200) {
+                $success = $true
+                break
+              }
+            }
+            catch {
+              Start-Sleep -Seconds 2
+            }
+          }
 
-  publish:
-    name: Publish Docker image
-    needs: verify
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
+          if (-not $success) {
+            docker logs ionic-crud
+            exit 1
+          }
 
-    steps:
-      - name: Check out source
-        uses: actions/checkout@v4
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/user-crud
-          tags: |
-            type=raw,value=latest
-            type=sha
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          Write-Host "Ionic app is available at http://localhost:8100/"
