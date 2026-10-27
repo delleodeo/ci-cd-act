@@ -1,0 +1,12 @@
+﻿{
+  "repositoryName": "delleodeo/ci-cd-act",
+  "pipelineDirectory": "ci-cd-act",
+  "workspaceDirectory": "ci-cd-act\\ci-cd-act",
+  "repositories": {
+    "delleodeo/ci-cd-act": {
+      "repositoryPath": "ci-cd-act\\ci-cd-act",
+      "lastRunOn": "10/27/2026 22:36:36 +08:00"
+    }
+  },
+  "lastRunOn": "10/27/2026 22:44:46 +08:00"
+}
