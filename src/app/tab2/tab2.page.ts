@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, NgZone, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
 
@@ -51,13 +51,11 @@ export class Tab2Page implements OnInit {
   };
   private stopUsersListener?: Unsubscribe;
 
-  constructor(
-    private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
-    private zone: NgZone,
-    private changeDetector: ChangeDetectorRef
-  ) {}
+  private readonly alertCtrl = inject(AlertController);
+  private readonly loadingCtrl = inject(LoadingController);
+  private readonly toastCtrl = inject(ToastController);
+  private readonly zone = inject(NgZone);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.loadUsers();
