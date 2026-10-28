@@ -1,51 +1,76 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>add laundry service v3</ion-title>
+    <ion-title>
+      <span class="eyebrow">LAUNDRY HUB</span>
+      Add a service
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <section class="page-intro">
+    <div class="intro-icon">
+      <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon>
+    </div>
+    <div>
+      <h1>Create a new service</h1>
+      <p>Keep your laundry menu fresh and easy to book.</p>
+    </div>
+  </section>
 
-  <ion-item>
+  <div class="form-card">
+  <ion-item lines="none">
     <ion-input
-      placeholder="Service name"
+      label="Service name"
+      labelPlacement="stacked"
+      placeholder="e.g. Wash & fold"
       [(ngModel)]="newService.serviceName">
     </ion-input>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="none">
     <ion-input
       type="number"
-      placeholder="Price"
+      label="Price"
+      labelPlacement="stacked"
+      placeholder="0.00"
+      min="0"
       [(ngModel)]="newService.price">
     </ion-input>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="none">
     <ion-input
-      placeholder="Category"
+      label="Category"
+      labelPlacement="stacked"
+      placeholder="e.g. Clothing"
       [(ngModel)]="newService.category">
     </ion-input>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="none">
     <ion-input
-      placeholder="Duration"
+      label="Duration"
+      labelPlacement="stacked"
+      placeholder="e.g. 24 hours"
       [(ngModel)]="newService.duration">
     </ion-input>
   </ion-item>
 
-  <ion-item>
-    <ion-input
-      placeholder="Status"
-      [(ngModel)]="newService.status">
-    </ion-input>
+  <ion-item lines="none">
+    <ion-select label="Status" labelPlacement="stacked" placeholder="Choose status" [(ngModel)]="newService.status">
+      <ion-select-option value="not done">Not done</ion-select-option>
+      <ion-select-option value="done">Done</ion-select-option>
+    </ion-select>
   </ion-item>
 
   <ion-button
     expand="block"
+    class="primary-action"
     (click)="addUser()">
+    <ion-icon slot="start" name="add-circle-outline" aria-hidden="true"></ion-icon>
     Add Service
   </ion-button>
+  </div>
 
 </ion-content>

@@ -1,17 +1,30 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      <span class="eyebrow">LAUNDRY HUB</span>
+      About
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <section class="about-card">
+    <div class="brand-mark">
+      <ion-icon name="water-outline" aria-hidden="true"></ion-icon>
+    </div>
+    <p class="overline">SIMPLE SERVICE MANAGEMENT</p>
+    <h1>Laundry Hub</h1>
+    <p>Keep every service, price, and turnaround time in one tidy place.</p>
+  </section>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <div class="feature-list">
+    <div class="feature">
+      <ion-icon name="flash-outline" aria-hidden="true"></ion-icon>
+      <div><h2>Stay organized</h2><p>Manage your service menu from one simple workspace.</p></div>
+    </div>
+    <div class="feature">
+      <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+      <div><h2>Find it fast</h2><p>Search and filter services whenever you need them.</p></div>
+    </div>
+  </div>
 </ion-content>

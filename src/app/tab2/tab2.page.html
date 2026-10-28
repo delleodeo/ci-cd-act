@@ -1,16 +1,30 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Laundry Services</ion-title>
+    <ion-title>
+      <span class="eyebrow">LAUNDRY HUB</span>
+      Services
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <section class="list-heading">
+    <div>
+      <p class="overline">YOUR MENU</p>
+      <h1>Laundry services</h1>
+      <p class="subtitle">Manage the services your customers can book.</p>
+    </div>
+    <div class="service-count">{{ services.length }} <span>total</span></div>
+  </section>
 
   <ion-searchbar
+    class="service-search"
     [(ngModel)]="searchTerm"
-    placeholder="Search services">
+    placeholder="Search by name, category..."
+    show-clear-button="focus">
   </ion-searchbar>
 
+  <div class="filter-wrap">
   <ion-segment value="all" [(ngModel)]="statusFilter">
     <ion-segment-button value="all">
       <ion-label>All</ion-label>
@@ -22,35 +36,44 @@
       <ion-label>Done</ion-label>
     </ion-segment-button>
   </ion-segment>
+  </div>
 
   <ion-list>
 
     @for (service of filteredServices; track service.id) {
     <ion-item-sliding>
 
-      <ion-item>
+      <ion-item lines="none">
 
         <ion-label>
-          <h2>{{ service.serviceName }}</h2>
-          <p>Price: {{ service.price }}</p>
-          <p>Category: {{ service.category }}</p>
-          <p>Duration: {{ service.duration }}</p>
-          <p>Status: {{ service.status }}</p>
+          <div class="service-title-row">
+            <h2>{{ service.serviceName }}</h2>
+            <ion-badge [color]="service.status.trim().toLowerCase() === 'done' ? 'success' : 'warning'">
+              {{ service.status }}
+            </ion-badge>
+          </div>
+          <p class="service-category">{{ service.category }}</p>
+          <div class="service-meta">
+            <span><ion-icon name="cash-outline" aria-hidden="true"></ion-icon>{{ service.price }}</span>
+            <span><ion-icon name="time-outline" aria-hidden="true"></ion-icon>{{ service.duration }}</span>
+          </div>
         </ion-label>
 
         <ion-button
           size="small"
-          fill="outline"
+          fill="clear"
+          aria-label="Update service"
           (click)="openEditModal(service)">
-          Update
+          <ion-icon slot="icon-only" name="create-outline" aria-hidden="true"></ion-icon>
         </ion-button>
 
         <ion-button
           size="small"
-          fill="outline"
+          fill="clear"
           color="danger"
+          aria-label="Delete service"
           (click)="deleteService(service)">
-          Delete
+          <ion-icon slot="icon-only" name="trash-outline" aria-hidden="true"></ion-icon>
         </ion-button>
 
       </ion-item>
@@ -71,11 +94,11 @@
   </ion-list>
 
   @if (filteredServices.length === 0) {
-  <ion-text color="medium">
-
-    <p>{{ services.length === 0 ? 'No services yet.' : 'No matching services.' }}</p>
-
-  </ion-text>
+  <div class="empty-state">
+    <ion-icon name="file-tray-outline" aria-hidden="true"></ion-icon>
+    <h2>{{ services.length === 0 ? 'No services yet' : 'No matching services' }}</h2>
+    <p>{{ services.length === 0 ? 'Add your first service to get started.' : 'Try a different search or filter.' }}</p>
+  </div>
   }
 
   <ion-modal
@@ -86,7 +109,7 @@
         <ion-toolbar>
           <ion-title>Update Service</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="closeEditModal()">Close</ion-button>
+            <ion-button (click)="closeEditModal()">Cancel</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
